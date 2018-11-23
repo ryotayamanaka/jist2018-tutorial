@@ -1,0 +1,116 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix of: <http://openflights.org/> .
+
+<#Airline>
+  rr:logicalTable [ rr:tableName "airlines" ] ; 
+  rr:subjectMap [ 
+    rr:template "http://openflights.org/Airline/{airline_id}" ; 
+    rr:class of:Airline ; 
+  ] ;
+  rr:predicateObjectMap [ 
+    rr:predicate rdfs:label ; 
+    rr:objectMap [ rr:column "name" ] ;
+  ] ;
+  rr:predicateObjectMap [ 
+    rr:predicate of:iata ; 
+    rr:objectMap [ rr:column "iata" ] ;
+  ] ;
+  rr:predicateObjectMap [ 
+    rr:predicate of:country ; 
+    rr:objectMap [ rr:column "country" ] ;
+  ] ;
+  rr:predicateObjectMap [ 
+    rr:predicate of:active; 
+    rr:objectMap [ rr:column "active" ] ;
+  ] .
+
+<#Airport>
+  rr:logicalTable [ rr:tableName "airports" ] ; 
+  rr:subjectMap [ 
+    rr:template "http://openflights.org/Airport/{airport_id}" ; 
+    rr:class of:Airport ; 
+  ] ;
+  rr:predicateObjectMap [ 
+    rr:predicate rdfs:label ; 
+    rr:objectMap [ rr:column "name" ] ;
+  ] ;
+  rr:predicateObjectMap [ 
+    rr:predicate of:city ; 
+    rr:objectMap [ rr:column "city" ] ;
+  ] ;
+  rr:predicateObjectMap [ 
+    rr:predicate of:country ; 
+    rr:objectMap [ rr:column "country" ] ;
+  ] ;
+  rr:predicateObjectMap [ 
+    rr:predicate of:iata ; 
+    rr:objectMap [ rr:column "iata" ] ;
+  ] ;
+  rr:predicateObjectMap [ 
+    rr:predicate of:latitude ; 
+    rr:objectMap [ rr:column "latitude" ] ;
+  ] ;
+  rr:predicateObjectMap [ 
+    rr:predicate of:longitude ; 
+    rr:objectMap [ rr:column "longitude" ] ;
+  ] .
+
+<#Plane>
+  rr:logicalTable [ rr:tableName "planes" ] ; 
+  rr:subjectMap [ 
+    rr:template "http://openflights.org/Plane/{iata}" ; 
+    rr:class of:Plane ; 
+  ] ;
+  rr:predicateObjectMap [ 
+    rr:predicate rdfs:label ; 
+    rr:objectMap [ rr:column "name" ] ;
+  ] .
+
+<#RouteView>
+  rr:sqlQuery """
+    SELECT
+      routes.*
+    , SUBSTR(equipment, 1, 3) primary_equipment
+    FROM routes
+  """ .
+
+<#Route>
+  rr:logicalTable <#RouteView> ; 
+  rr:subjectMap [ 
+    rr:template "http://openflights.org/Route/{airline}_{source_airport}_{destination_airport}" ; 
+    rr:class of:Route ; 
+  ] ;
+  rr:predicateObjectMap [ 
+    rr:predicate rdfs:label ; 
+    rr:objectMap [ rr:template "{airline}_{source_airport}_{destination_airport}"; rr:termType rr:Literal; ] ;
+  ] ;
+  rr:predicateObjectMap [ 
+    rr:predicate of:airline ;
+    rr:objectMap [ 
+      rr:parentTriplesMap <#Airline> ; 
+      rr:joinCondition [ rr:child "airline_id"; rr:parent "airline_id" ]
+    ]
+  ] ;
+  rr:predicateObjectMap [ 
+    rr:predicate of:source_airport ;
+    rr:objectMap [ 
+      rr:parentTriplesMap <#Airport> ; 
+      rr:joinCondition [ rr:child "source_airport_id"; rr:parent "airport_id" ]
+    ]
+  ] ;
+  rr:predicateObjectMap [ 
+    rr:predicate of:destination_airport ;
+    rr:objectMap [ 
+      rr:parentTriplesMap <#Airport> ; 
+      rr:joinCondition [ rr:child "destination_airport_id"; rr:parent "airport_id" ]
+    ]
+  ] ;
+  rr:predicateObjectMap [ 
+    rr:predicate of:primary_equipment ;
+    rr:objectMap [ 
+      rr:parentTriplesMap <#Plane> ; 
+      rr:joinCondition [ rr:child "primary_equipment"; rr:parent "iata" ]
+    ]
+  ] .

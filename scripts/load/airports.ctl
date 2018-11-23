@@ -1,7 +1,7 @@
 OPTIONS (DIRECT=TRUE)
 LOAD DATA
 CHARACTERSET UTF8
-INFILE '/opt/jist2018-tutorial/input/airports.dat'
+INFILE '/opt/jist2018-tutorial/input/load/airports.dat'
 TRUNCATE INTO TABLE airports
 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
 (
