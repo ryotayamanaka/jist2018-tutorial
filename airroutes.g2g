@@ -1,0 +1,23 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX sesame: <http://www.openrdf.org/schema/sesame#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX fn: <http://www.w3.org/2005/xpath-functions#>
+
+(a:airline {name:l, country:c})
+    ?a a <http://openflights.org/resource/Airline> .
+    ?a rdfs:label ?l .
+    ?a <http://openflights.org/resource/airline/country> ?c .
+
+(a:airport {iata:i, city:c})
+    ?a a <http://openflights.org/resource/Airport> .
+    ?a <http://openflights.org/resource/airport/iata> ?i .
+    ?a <http://openflights.org/resource/airport/city> ?c .
+
+(a1:airport)-[:hasFlightTo {airline:al, plane:p}]->(a2:airport)
+    ?r <http://openflights.org/resource/route/sourceId> ?a1 .
+    ?r <http://openflights.org/resource/route/destinationId> ?a2 .
+    ?r <http://openflights.org/resource/route/airlineId> ?al .
+    ?r  <http://openflights.org/resource/route/plane> ?p .
+
