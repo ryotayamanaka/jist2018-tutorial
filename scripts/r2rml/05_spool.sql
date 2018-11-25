@@ -4,7 +4,7 @@ SET FEEDBACK OFF
 SET ARRAYSIZE 100
 SET TRIMSPOOL ON
 SET TIMING ON
-SPOOL export.nt
+SPOOL /opt/jist2018-tutorial/output/data.nt
 
 SELECT
   S$RDFTERM || ' ' ||
@@ -14,7 +14,7 @@ FROM TABLE(SEM_MATCH('
 SELECT ?s ?p ?o
 WHERE { ?s ?p ?o }
 ',
-SEM_MODELS('ICGC_RDFVIEW'),
+SEM_MODELS('RDFVIEW'),
 null,
 null,
 null,

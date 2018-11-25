@@ -1,0 +1,16 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX of: <http://openflights.org/>
+
+(a:airport {name:l, iata:i, city:c})
+    ?a a of:Airport .
+    ?a rdfs:label ?l .
+    ?a of:iata ?i .
+    ?a of:city ?c .
+
+(a1:airport)-[:has_flight_to {airline:al, country:c, plane:p}]->(a2:airport)
+    ?r of:source_airport ?a1 .
+    ?r of:destination_airport ?a2 .
+    ?r of:airline [ rdfs:label ?al ; of:country ?c ] .
+    ?r of:primary_equipment [ rdfs:label ?p ] .
+
