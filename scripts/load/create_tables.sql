@@ -48,3 +48,4 @@ CREATE TABLE planes (
 , icao VARCHAR2(10)
 );
 
+EXIT
